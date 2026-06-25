@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { useAuth } from "@/lib/auth";
 import UserAvatar from "@/components/UserAvatar";
 import PostCard from "@/components/PostCard";
@@ -157,14 +158,25 @@ export default function ProfilePage() {
       {/* Banner */}
       <div
         style={{
+          position: "relative",
           height: 120,
-          background: profile?.bannerImage
-            ? `url(${profile.bannerImage}) center/cover no-repeat`
-            : "linear-gradient(135deg, var(--accent-a) 0%, var(--accent-b) 100%)",
+          background: "linear-gradient(135deg, var(--accent-a) 0%, var(--accent-b) 100%)",
           opacity: loadingProfile ? 0.4 : 1,
           transition: "opacity 300ms",
+          overflow: "hidden",
         }}
-      />
+      >
+        {profile?.bannerImage && (
+          <Image
+            src={profile.bannerImage}
+            alt=""
+            fill
+            sizes="(max-width: 1100px) 100vw, 700px"
+            style={{ objectFit: "cover" }}
+            priority
+          />
+        )}
+      </div>
 
       {/* Profile header */}
       <div style={{ padding: "0 16px 16px", position: "relative" }}>

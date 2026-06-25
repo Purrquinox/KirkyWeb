@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import type { FeedItem, Post } from "@/lib/api";
 import UserAvatar from "./UserAvatar";
 import PostActionBar from "./PostActionBar";
@@ -170,21 +171,25 @@ export default function PostCard({ item, currentUsername }: PostCardProps) {
           </p>
 
           {imageUrl && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={imageUrl}
-              alt="Post image"
+            <div
               style={{
+                position: "relative",
                 width: "100%",
-                maxHeight: 400,
-                objectFit: "cover",
+                height: 300,
                 borderRadius: 12,
+                overflow: "hidden",
                 marginTop: 10,
-                display: "block",
                 border: "1px solid var(--div)",
               }}
-              loading="lazy"
-            />
+            >
+              <Image
+                src={imageUrl}
+                alt="Post image"
+                fill
+                sizes="(max-width: 768px) 100vw, 600px"
+                style={{ objectFit: "cover" }}
+              />
+            </div>
           )}
 
           {quoteOf && <QuoteCard post={quoteOf} />}
