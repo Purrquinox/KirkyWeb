@@ -18,6 +18,7 @@ interface AuthState {
 interface AuthContextValue extends AuthState {
   login: (email: string, password: string) => Promise<void>;
   signup: (email: string, password: string, username: string) => Promise<void>;
+  loginWithApple: (identityToken: string, user?: { firstName?: string; lastName?: string; email?: string }) => Promise<void>;
   logout: () => Promise<void>;
   refreshUser: () => Promise<void>;
 }
@@ -78,6 +79,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  const loginWithApple = useCallback(async (
+    identityToken: string,
+    user?: { firstName?: string; lastName?: string; email?: string }
+  ) => {
+    const result = await api.loginWithApple({ identityToken, user });
+    api.setTokens(result.accessToken, result.refreshToken);
+    persist(result.accessToken, result.refreshToken);
+    const { user: me } = await api.getMe();
+    setState({ user: me, loading: false });
+  }, []);
+
   const logout = useCallback(async () => {
     await api.logout().catch(() => {});
     api.clearTokens();
@@ -95,7 +107,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ ...state, login, signup, logout, refreshUser }}>
+    <AuthContext.Provider value={{ ...state, login, signup, loginWithApple, logout, refreshUser }}>
       {children}
     </AuthContext.Provider>
   );

@@ -264,7 +264,7 @@ export async function signup(params: {
   password: string;
   username: string;
 }): Promise<AuthResult & { requiresEmailVerification: boolean }> {
-  return request("/auth/signup", {
+  return request("/api/auth/signup", {
     method: "POST",
     body: params,
     auth: false,
@@ -276,7 +276,7 @@ export async function login(params: {
   email: string;
   password: string;
 }): Promise<AuthResult> {
-  return request("/auth/login", {
+  return request("/api/auth/login", {
     method: "POST",
     body: params,
     auth: false,
@@ -288,7 +288,7 @@ export async function loginWithApple(params: {
   identityToken: string;
   user?: { firstName?: string; lastName?: string; email?: string };
 }): Promise<AuthResult & { isNewUser: boolean }> {
-  return request("/auth/apple", {
+  return request("/api/auth/apple", {
     method: "POST",
     body: params as Record<string, unknown>,
     auth: false,
@@ -300,14 +300,14 @@ export async function getGithubAuthorizeUrl(): Promise<{
   url: string;
   state: string;
 }> {
-  return request("/auth/github/authorize", { auth: false, baseUrl: AUTH_BASE });
+  return request("/api/auth/github/authorize", { auth: false, baseUrl: AUTH_BASE });
 }
 
 export async function loginWithGithub(params: {
   code: string;
   state: string;
 }): Promise<AuthResult & { isNewUser: boolean }> {
-  return request("/auth/github/callback", {
+  return request("/api/auth/github/callback", {
     method: "POST",
     body: params,
     auth: false,
@@ -317,7 +317,7 @@ export async function loginWithGithub(params: {
 
 export async function refreshToken(): Promise<{ accessToken: string }> {
   if (!_refreshToken) throw new Error("No refresh token available");
-  return request("/auth/refresh", {
+  return request("/api/auth/refresh", {
     method: "POST",
     body: { refreshToken: _refreshToken },
     auth: false,
@@ -327,7 +327,7 @@ export async function refreshToken(): Promise<{ accessToken: string }> {
 
 export async function logout(): Promise<{ message: string }> {
   if (!_refreshToken) throw new Error("No refresh token available");
-  const res = await request<{ message: string }>("/auth/logout", {
+  const res = await request<{ message: string }>("/api/auth/logout", {
     method: "POST",
     body: { refreshToken: _refreshToken },
     auth: false,
@@ -340,7 +340,7 @@ export async function logout(): Promise<{ message: string }> {
 export async function forgotPassword(params: {
   email: string;
 }): Promise<{ message: string }> {
-  return request("/auth/forgot-password", {
+  return request("/api/auth/forgot-password", {
     method: "POST",
     body: params,
     auth: false,

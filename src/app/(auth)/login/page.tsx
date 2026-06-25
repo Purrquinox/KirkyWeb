@@ -4,6 +4,7 @@ import { useState, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth";
+import { AppleSignInButton } from "@/components/AppleSignInButton";
 
 function FloatingField({
   id,
@@ -185,6 +186,15 @@ export default function LoginPage() {
             {loading ? "Signing in..." : "Sign in"}
           </button>
         </form>
+
+        <div style={{ marginTop: 24, display: "flex", flexDirection: "column", gap: 12 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <div style={{ flex: 1, height: 1, background: "var(--div)" }} />
+            <span style={{ fontSize: 12, color: "var(--t-lo)", letterSpacing: "0.04em", textTransform: "uppercase" }}>or</span>
+            <div style={{ flex: 1, height: 1, background: "var(--div)" }} />
+          </div>
+          <AppleSignInButton onError={setError} />
+        </div>
 
         <div
           style={{
