@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 interface UserAvatarProps {
   username: string;
   firstName?: string | null;
@@ -56,13 +58,12 @@ export default function UserAvatar({
       }}
     >
       {avatar ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
+        <Image
           src={avatar}
           alt={`${username}'s avatar`}
           width={size}
           height={size}
-          style={{ width: size, height: size, objectFit: "cover", display: "block" }}
+          style={{ objectFit: "cover", display: "block" }}
         />
       ) : (
         <div
