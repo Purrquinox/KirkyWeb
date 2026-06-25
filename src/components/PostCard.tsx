@@ -84,6 +84,7 @@ export default function PostCard({ item, currentUsername }: PostCardProps) {
 
   return (
     <article
+      className="post-hover"
       style={{
         borderBottom: "1px solid var(--div)",
         padding: "14px 16px",

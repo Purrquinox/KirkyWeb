@@ -2,19 +2,46 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { HomeIcon, ExploreIcon, BellIcon, BookmarkIcon, UserIcon } from "./Icons";
-import FAB from "./FAB";
+import { HomeIcon, ExploreIcon, BellIcon, BookmarkIcon, UserIcon, SettingsIcon } from "./Icons";
 
 const NAV = [
-  { href: "/home",              icon: HomeIcon,     label: "Home"          },
-  { href: "/explore",           icon: ExploreIcon,  label: "Explore"       },
-  { href: "/notifications",     icon: BellIcon,     label: "Notifications" },
-  { href: "/bookmarks",         icon: BookmarkIcon, label: "Bookmarks"     },
+  { href: "/home",          icon: HomeIcon,     label: "Home"          },
+  { href: "/explore",       icon: ExploreIcon,  label: "Explore"       },
+  { href: "/notifications", icon: BellIcon,     label: "Notifications" },
+  { href: "/bookmarks",     icon: BookmarkIcon, label: "Bookmarks"     },
 ];
 
 interface SidebarProps {
   username?: string;
   onCompose?: () => void;
+}
+
+function NavItem({
+  href,
+  icon: Icon,
+  label,
+  active,
+}: {
+  href: string;
+  icon: React.ComponentType<{ size?: number }>;
+  label: string;
+  active: boolean;
+}) {
+  return (
+    <Link
+      href={href}
+      aria-label={label}
+      className={active ? "nav-link nav-link-active" : "nav-link"}
+      style={{
+        color: active ? "var(--t-hi)" : "var(--t-lo)",
+        fontWeight: active ? 600 : 400,
+        letterSpacing: active ? "-0.01em" : "0",
+      }}
+    >
+      <Icon size={20} />
+      {label}
+    </Link>
+  );
 }
 
 export default function Sidebar({ username, onCompose }: SidebarProps) {
@@ -23,114 +50,80 @@ export default function Sidebar({ username, onCompose }: SidebarProps) {
   return (
     <aside
       style={{
-        width: 64,
+        width: 220,
         height: "100dvh",
         position: "sticky",
         top: 0,
         display: "flex",
         flexDirection: "column",
-        alignItems: "center",
-        padding: "16px 0 24px",
+        padding: "16px 12px 24px",
         borderRight: "1px solid var(--div)",
         flexShrink: 0,
-        gap: 0,
       }}
     >
       {/* Wordmark */}
       <Link
         href="/home"
-        style={{ textDecoration: "none", marginBottom: 20 }}
+        style={{ textDecoration: "none", display: "block", marginBottom: 20, paddingLeft: 10 }}
         aria-label="Kirky home"
       >
-        <span
-          style={{
-            fontWeight: 900,
-            fontSize: 20,
-            letterSpacing: "-0.8px",
-            color: "var(--t-hi)",
-            userSelect: "none",
-            lineHeight: 1,
-          }}
-        >
-          k
-        </span>
+        <span className="wordmark">kirky</span>
       </Link>
 
-      {/* Nav items */}
-      <nav
+      {/* Write / Compose button */}
+      <button
+        onClick={onCompose}
         style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: 4,
-          flex: 1,
+          width: "100%",
+          padding: "9px 14px",
+          borderRadius: 10,
+          border: "none",
+          cursor: "pointer",
+          background: "linear-gradient(135deg, var(--accent-a), var(--accent-b))",
+          color: "rgba(255,255,255,0.95)",
+          fontSize: 14,
+          fontWeight: 700,
+          fontFamily: "inherit",
+          letterSpacing: "-0.01em",
+          textAlign: "center",
+          marginBottom: 16,
+          transition: "opacity 160ms var(--ease-out)",
         }}
+        onMouseEnter={(e) => { e.currentTarget.style.opacity = "0.85"; }}
+        onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; }}
       >
-        {NAV.map(({ href, icon: Icon, label }) => {
-          const active = pathname === href || pathname.startsWith(href + "/");
-          return (
-            <Link
-              key={href}
-              href={href}
-              aria-label={label}
-              title={label}
-              style={{
-                position: "relative",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                width: 44,
-                height: 44,
-                borderRadius: 12,
-                color: active ? "var(--t-hi)" : "var(--t-lo)",
-                textDecoration: "none",
-                transition: `color ${160}ms var(--ease-out), background ${160}ms var(--ease-out)`,
-                background: active ? "var(--bg-surface)" : "transparent",
-              }}
-            >
-              <Icon size={22} />
-              {active && (
-                <span
-                  style={{
-                    position: "absolute",
-                    bottom: 4,
-                    left: "50%",
-                    transform: "translateX(-50%)",
-                    width: 20,
-                    height: 3,
-                    borderRadius: 999,
-                    background: "linear-gradient(90deg, var(--accent-a), var(--accent-b))",
-                  }}
-                />
-              )}
-            </Link>
-          );
-        })}
+        Write
+      </button>
+
+      {/* Nav items */}
+      <nav style={{ flex: 1, display: "flex", flexDirection: "column", gap: 2 }}>
+        {NAV.map(({ href, icon, label }) => (
+          <NavItem
+            key={href}
+            href={href}
+            icon={icon}
+            label={label}
+            active={pathname === href || pathname.startsWith(href + "/")}
+          />
+        ))}
 
         {username && (
-          <Link
+          <NavItem
             href={`/${username}`}
-            aria-label="Profile"
-            title="Profile"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              width: 44,
-              height: 44,
-              borderRadius: 12,
-              color: pathname === `/${username}` ? "var(--t-hi)" : "var(--t-lo)",
-              textDecoration: "none",
-              transition: `color ${160}ms var(--ease-out)`,
-            }}
-          >
-            <UserIcon size={22} />
-          </Link>
+            icon={UserIcon}
+            label="Profile"
+            active={pathname === `/${username}`}
+          />
         )}
       </nav>
 
-      {/* Compose FAB */}
-      <FAB onClick={onCompose} />
+      {/* Settings */}
+      <NavItem
+        href="/settings"
+        icon={SettingsIcon}
+        label="Settings"
+        active={pathname.startsWith("/settings")}
+      />
     </aside>
   );
 }

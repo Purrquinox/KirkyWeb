@@ -64,6 +64,7 @@ function ActionChip({
             fontWeight: active ? 700 : 400,
             lineHeight: 1,
             letterSpacing: active ? "-0.01em" : "0",
+            fontVariantNumeric: "tabular-nums",
           }}
         >
           {count}

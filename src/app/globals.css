@@ -8,6 +8,7 @@
   --bg-raised:    #120F17;
   --bg-surface:   #1C1826;
   --bg-overlay:   rgba(10, 8, 13, 0.88);
+  --bg-hover:     rgba(255, 255, 255, 0.035);
 
   /* Accent — default palette: Violet → Blue */
   --accent-a:     #6633CC;
@@ -131,6 +132,66 @@ body {
   color: var(--t-hi);
   line-height: 1;
   user-select: none;
+}
+
+/* ─── Skeleton shimmer ───────────────────────────────────────────────────── */
+
+@keyframes shimmer {
+  0%   { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--bg-surface) 25%,
+    var(--bg-raised) 50%,
+    var(--bg-surface) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.6s linear infinite;
+  border-radius: 6px;
+}
+
+/* ─── Post card hover ────────────────────────────────────────────────────── */
+
+.post-hover {
+  transition: background 120ms var(--ease-out);
+}
+.post-hover:hover {
+  background: var(--bg-hover);
+}
+
+/* ─── Feed tabs responsive sticky ───────────────────────────────────────── */
+
+.feed-tabs {
+  position: sticky;
+  top: 0;
+  z-index: 9;
+}
+@media (max-width: 1023px) {
+  .feed-tabs {
+    top: 52px;
+  }
+}
+
+/* ─── Sidebar nav links ──────────────────────────────────────────────────── */
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 15px;
+  transition: background 120ms var(--ease-out);
+}
+.nav-link:not(.nav-link-active):hover {
+  background: var(--bg-hover);
+}
+.nav-link-active {
+  background: var(--bg-surface);
 }
 
 /* ─── Reduced motion ─────────────────────────────────────────────────────── */

@@ -8,6 +8,7 @@ import TabBar from "@/components/TabBar";
 import TopBar from "@/components/TopBar";
 import TrendingPanel from "@/components/TrendingPanel";
 import ComposeModal from "@/components/ComposeModal";
+import FAB from "@/components/FAB";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
@@ -87,6 +88,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       {/* Mobile floating tab bar */}
       <div className="lg:hidden">
         <TabBar username={profile?.username} />
+      </div>
+
+      {/* Mobile compose FAB — sits above the tab bar */}
+      <div className="lg:hidden" style={{ position: "fixed", bottom: 88, right: 20, zIndex: 45 }}>
+        <FAB onClick={() => setComposeOpen(true)} />
       </div>
 
       {composeOpen && (

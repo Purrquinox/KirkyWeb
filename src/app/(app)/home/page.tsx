@@ -78,12 +78,10 @@ export default function HomePage() {
     <div>
       {/* Feed tabs */}
       <div
+        className="feed-tabs"
         style={{
           display: "flex",
           borderBottom: "1px solid var(--div)",
-          position: "sticky",
-          top: 52,
-          zIndex: 9,
           background: "var(--bg-overlay)",
           backdropFilter: "blur(20px)",
           WebkitBackdropFilter: "blur(20px)",
