@@ -87,7 +87,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
       {/* Mobile floating tab bar */}
       <div className="lg:hidden">
-        <TabBar username={profile?.username} />
+        <TabBar profile={profile} />
       </div>
 
       {/* Mobile compose FAB — sits above the tab bar */}
