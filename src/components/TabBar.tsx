@@ -2,7 +2,15 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { HomeIcon, ExploreIcon, BellIcon, BookmarkIcon, UserIcon } from "./Icons";
+import { HomeIcon, ExploreIcon, BellIcon, BookmarkIcon } from "./Icons";
+import UserAvatar from "./UserAvatar";
+
+interface TabBarProfile {
+  username: string;
+  firstName?: string | null;
+  lastName?: string | null;
+  avatar?: string | null;
+}
 
 const TABS = [
   { href: "/home",          icon: HomeIcon,     label: "Home"          },
@@ -11,12 +19,8 @@ const TABS = [
   { href: "/bookmarks",     icon: BookmarkIcon, label: "Bookmarks"     },
 ];
 
-export default function TabBar({ username }: { username?: string }) {
+export default function TabBar({ profile }: { profile?: TabBarProfile | null }) {
   const pathname = usePathname();
-
-  const all = username
-    ? [...TABS, { href: `/${username}`, icon: UserIcon, label: "Profile" }]
-    : TABS;
 
   return (
     <nav
@@ -38,7 +42,7 @@ export default function TabBar({ username }: { username?: string }) {
         gap: 8,
       }}
     >
-      {all.map(({ href, icon: Icon, label }) => {
+      {TABS.map(({ href, icon: Icon, label }) => {
         const active = pathname === href || (href !== "/home" && pathname.startsWith(href));
         return (
           <Link
@@ -78,6 +82,48 @@ export default function TabBar({ username }: { username?: string }) {
           </Link>
         );
       })}
+
+      {profile && (
+        <Link
+          href={`/${profile.username}`}
+          aria-label="Profile"
+          title="Profile"
+          style={{
+            position: "relative",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            width: 44,
+            height: 40,
+            textDecoration: "none",
+            gap: 4,
+          }}
+        >
+          <UserAvatar
+            username={profile.username}
+            firstName={profile.firstName}
+            lastName={profile.lastName}
+            avatar={profile.avatar}
+            size={26}
+            isOwn={pathname === `/${profile.username}`}
+          />
+          {pathname === `/${profile.username}` && (
+            <span
+              style={{
+                width: 20,
+                height: 3,
+                borderRadius: 999,
+                background: "linear-gradient(90deg, var(--accent-a), var(--accent-b))",
+                position: "absolute",
+                bottom: 0,
+                left: "50%",
+                transform: "translateX(-50%)",
+              }}
+            />
+          )}
+        </Link>
+      )}
     </nav>
   );
 }
